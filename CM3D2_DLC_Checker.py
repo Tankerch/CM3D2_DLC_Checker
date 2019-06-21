@@ -37,6 +37,7 @@ start = time.time()
 
 #Open file
 line_Real = set(line.strip().split(",")[0] for line in open('Update.lst'))
+line_inform = []
 with open('CM_listDLC.lst', 'r') as f:
     for _ in range(1):
         next(f)
