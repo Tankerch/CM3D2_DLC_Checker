@@ -1,10 +1,12 @@
 #Version 3, Using update from repo
 import time
+import os.path
 import requests
 from colorama import init
 from termcolor import colored, cprint
 init()
 
+start = time.time()
 #Check connection
 #if connection is available, Check Update DLC list from repo
 #Write new DLC list if current DLC list is old
@@ -20,23 +22,25 @@ def check_internet():
 
 if check_internet():
     r = requests.get(url, timeout=3)
-    with open('CM_listDLC.lst', 'r') as f:
-        first_line_DLC = int(f.readline().rstrip('\n'))
-    first_line_update = r.text.splitlines()[0]
-    if first_line_update != "404: Not Found":
-        first_line_update = int(first_line_update)
-        if first_line_update > first_line_DLC:
-            with open('CM_listDLC.lst', 'w') as f:
-                f.write(r.text)
+    if os.path.isfile('CM_listDLC.lst'):
+        with open('CM_listDLC.lst', 'r') as f:
+            first_line_DLC = int(f.readline().rstrip('\n'))
+        first_line_update = r.text.splitlines()[0]
+        if first_line_update != "404: Not Found":
+            first_line_update = int(first_line_update)
+            if first_line_update > first_line_DLC:
+                with open('CM_listDLC.lst', 'wb') as f:
+                    f.write(r.content)
+    else:
+        with open('CM_listDLC.lst', 'wb') as f:
+            f.write(r.content)
 
-#Start
 print(colored("================================================================================================", 'cyan',attrs=['bold']))
-print(colored('DLC_Checker by Tankerch v.190619', 'cyan',attrs=['bold']))
+print(colored('CM3D2_DLC_Checker by Tankerch v.190619', 'cyan',attrs=['bold']))
 print(colored("================================================================================================", 'cyan',attrs=['bold']))
-start = time.time()
 
 #Open file
-line_Real = set(line.strip().split(",")[0] for line in open('Update.lst'))
+line_Real = set(line.rstrip().split(",")[0] for line in open('Update.lst'))
 line_inform = []
 with open('CM_listDLC.lst', 'r') as f:
     for _ in range(1):
@@ -63,7 +67,6 @@ print(colored('Already Installed:', 'cyan',attrs=['bold']))
 for x in sorted(count_p):
     print(x)
 
-#print("\nNot Installed:")
 print(colored("\nNot Installed:", 'cyan',attrs=['bold']))
 for x in sorted(count_n):
     print(x)
