@@ -34,9 +34,13 @@ if check_internet():
     else:
         with open('CM_listDLC.lst', 'wb') as f:
             f.write(r.content)
+else:
+    if not os.path.isfile('CM_listDLC.lst'):
+        input("CM_listDLC.lst isn't exist, please connect to internet to auto-download it")
+        exit()
 
 print(colored("================================================================================================", 'cyan',attrs=['bold']))
-print(colored('CM3D2_DLC_Checker by Tankerch v.190619', 'cyan',attrs=['bold']))
+print(colored('CM3D2_DLC_Checker by Tankerch', 'cyan',attrs=['bold']))
 print(colored("================================================================================================", 'cyan',attrs=['bold']))
 
 #Open file
